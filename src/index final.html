@@ -49,7 +49,7 @@
 
         .years-area {
             position: relative;
-            width: 60%;
+            width: 90%;
             margin: 0 auto;
         }
 
@@ -72,55 +72,13 @@
                 <div class="years-area">
                     <div id="mydiv">
                         <div id="mydivheader">
-                            <span>1851<br /> |</span>
-                            <span>1852<br /> |</span>
-                            <span>1853<br /> |</span>
-                            <span>1854<br /> |</span>
-                            <span>1855<br /> |</span>
-                            <span>1990<br /> |</span>
-                            <span>1991<br /> |</span>
-                            <span>1992<br /> |</span>
-                            <span>1993<br /> |</span>
-                            <span>1994<br /> |</span>
-                            <span>1995<br /> |</span>
                         </div>
                     </div>
                     <span class="caret up"></span>
                 </div>
             </div> <!-- .timeline -->
 
-            <div class="pics-container">
-
-                <div class="pics" id="y90">
-                    <img src="images/image11.jpg" />
-                    <img src="images/image10.jpg" />
-                </div>
-                <div class="pics" id="y91">
-                    <img src="images/image1.jpg" />
-                    <img src="images/image2.jpg" />
-                    <img src="images/image3.jpg" />
-                </div>
-                <div class="pics" id="y92">
-                    <img src="images/image4.jpg" />
-                </div>
-                <div class="pics" id="y93">
-
-                    <img src="images/image6.jpg" />
-                    <img src="images/image5.jpg" />
-                </div>
-                <div class="pics" id="y94">
-                    <img src="images/image7.jpg" />
-
-                </div>
-                <div class="pics" id="y95">
-                    <img src="images/image8.jpg" />
-                    <img src="images/image9.jpg" />
-                </div>
-                <div class="pics" id="y96">
-                    <img src="images/image12.jpg" />
-                    <img src="images/image13.jpg" />
-                </div>
-
+            <div class="pics-container" id="pictures">
             </div> <!-- .events-content images ends here -->
         </section>
 
@@ -128,8 +86,43 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
     <script type="text/javascript">
-
-
+        var step = 10;
+        var min = 1800;
+        var max = 2020
+        $(document).ready(function () {
+            debugger;
+            var duumyData = seedData(20, min, max);
+            for (let i = 0; i < duumyData.length; i++) {
+                var pics = parseInt(Math.random() * 10 / 2 + 1);
+                $('#mydivheader').append('<span>' + duumyData[i].year + '<br /> |</span>');
+                var images = '<div class="pics" id="y' + i + '">'
+                for (var j = 0; j < pics; j++) {
+                    var path = parseInt(Math.random() * 10 + 1);
+                    images += '<img src="images/image' + path + '.jpg" /> \n'
+                }
+                images += '</div>'
+                $('#pictures').append(images);
+            }
+        });
+        function seedData(seed, startYear, endYear) {
+            var data = [];
+            function getRandomArbitrary(min, max) {
+                return parseInt(Math.random() * (max - min) + min);
+            }
+            function getRandomColor() {
+                return Math.floor(Math.random() * 16777215).toString(16);
+            }
+            var fromYear = startYear;
+            for (let i = 0; i < seed; i++) {
+                var toYear = fromYear + step;
+                data.push({
+                    color: getRandomColor(),
+                    year: getRandomArbitrary(fromYear, toYear)
+                });
+                fromYear = toYear;
+            }
+            return data;
+        }
         dragElement(document.getElementById("mydiv"));
 
         function dragElement(elmnt) {
@@ -178,9 +171,9 @@
 
         function ShowmeDiv(pos) {
             var step = 60;
-            var max = 94;
-            var min = 90
-            var cur = max - parseInt(pos / step);
+            var max = 19;
+            var min = 0
+            var cur = max - parseInt(Math.abs(pos) / step);
             if (cur > min) {
                 $('.pics').hide();
                 $('#y' + cur).show();
